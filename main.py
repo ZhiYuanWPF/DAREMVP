@@ -159,18 +159,16 @@ def is_username_valid(username):
     regex_match = re.search('^[a-zA-Z0-9]{4,64}$', username)
     return regex_match is not None
 
-# resolve current web server IP address
-ip_addr = get('https://api.ipify.org').text
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 server_port = 8443
-server_FQDN = 'https://' + ip_addr + ':' + str(server_port)
+server_FQDN = 'https://daremvp.southeastasia.cloudapp.azure.com:' + str(server_port)
 
 bcrypt = Bcrypt(app)
 
 # to fix issue with certain FireFox and Chrome
-cors = CORS(app, resources={r"/foo": {"origins": 'daremvp.southeastasia.cloudapp.azure.com:8443'}})
+cors = CORS(app, resources={r"/foo": {"origins": ''}})
 
 app.config["SECRET_KEY"] = "APP_SECRET_KEY"
 limiter = Limiter(
