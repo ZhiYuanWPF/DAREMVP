@@ -170,7 +170,7 @@ server_FQDN = 'https://' + ip_addr + ':' + str(server_port)
 bcrypt = Bcrypt(app)
 
 # to fix issue with certain FireFox and Chrome
-cors = CORS(app, resources={r"/foo": {"origins": ip_addr}})
+cors = CORS(app, resources={r"/foo": {"origins": 'daremvp.southeastasia.cloudapp.azure.com:8443'}})
 
 app.config["SECRET_KEY"] = "APP_SECRET_KEY"
 limiter = Limiter(
