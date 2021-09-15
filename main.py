@@ -9,8 +9,9 @@ from flask import session
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-
 from flask_bcrypt import Bcrypt
+
+from requests import get
 
 from functools import wraps
 from datetime import datetime
@@ -159,11 +160,7 @@ def is_username_valid(username):
     return regex_match is not None
 
 # resolve current web server IP address
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-ip_addr = s.getsockname()[0]
-s.close()
-
+ip_addr = get('https://api.ipify.org').text
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
