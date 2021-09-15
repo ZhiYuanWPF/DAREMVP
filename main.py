@@ -28,12 +28,7 @@ import time
 with open('../mongo_pw.txt', 'r') as f:
     mongo_password = f.read()
 
-print(mongo_password)
-
-start = time.time()
 client = pymongo.MongoClient('mongodb+srv://azureuser:' + mongo_password + '@cluster0.yqwjc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
-print("--- %s seconds ---" % (time.time() - start))
-
 
 mongo_catalog = client["DAREMVP"]["menucatalog"]
 mongo_cred = client["DAREMVP"]["credentials"]
