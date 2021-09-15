@@ -183,10 +183,7 @@ if not os.path.exists('logs'):
 logfile_name = 'logs/custom_log_' + datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.csv'
 
 with open(logfile_name, 'w') as f:
-    f.write("#Software: Microsoft Internet Information Services 7.5\n")
-    f.write("#Version: 1.0\n")
-    f.write("#Date: " + datetime.now().strftime('%Y-%m-%d, %H:%M:%S') + '\n')
-    f.write("#Fields: Client-IP-address Username Date Time Service-and-instance Server-name Server-IP-address Time-taken Client-bytes-sent Server-bytes-sent Service-status-code Windows-status-code Request-type Target-of-operation Parameters\n")
+    f.write("#Fields: Client-IP-address Username Date_Time Service-and-instance Server-name Server-IP-address Time-taken Client-bytes-sent Server-bytes-sent Service-status-code Windows-status-code Request-type Target-of-operation Parameters\n")
 
 @app.route('/landing', methods=["GET"])
 @requires_auth
@@ -519,7 +516,7 @@ def after_request(response):
     if QUERY_STRING == '':
         QUERY_STRING = '-'
 
-    logging_details = str(request.environ['REMOTE_ADDR']) + ' ' + user + ' ' + datetime.now().strftime('%d/%m/%Y, %H:%M:%S') + ' Flask SERVER, ' \
+    logging_details = str(request.environ['REMOTE_ADDR']) + ' ' + user + ' ' + datetime.now().strftime('%d/%m/%Y_%H:%M:%S') + ' Flask SERVER ' \
             + server_ip + ' - - - ' + str(response.status_code) + ' ' + '0 ' + str(request.environ['REQUEST_METHOD']) + ' ' + str(request.environ['REQUEST_URI']) + ' ' + QUERY_STRING + '\n'
 
     with open(logfile_name, 'a') as f:
