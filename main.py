@@ -6,7 +6,7 @@ from flask import render_template
 from flask import request
 from flask import redirect
 from flask import session
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
@@ -158,16 +158,12 @@ def is_username_valid(username):
     regex_match = re.search('^[a-zA-Z0-9]{4,64}$', username)
     return regex_match is not None
 
-# resolve current web server IP address
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-ip_addr = s.getsockname()[0]
-s.close()
+ip_addr = 'daremvp.southeastasia.cloudapp.azure.com'
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 server_port = 8443
-server_FQDN = 'https://' + str(ip_addr) + ':' + str(server_port)
+server_FQDN = 'https://daremvp.southeastasia.cloudapp.azure.com:' + str(server_port)
 
 bcrypt = Bcrypt(app)
 
