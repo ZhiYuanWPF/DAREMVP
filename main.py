@@ -545,6 +545,6 @@ def ratelimit_handler(error):
 ciphersuite_list = "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384"
 context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 context.set_ciphers(ciphersuite_list)
-context.load_cert_chain("https/cert.pem", "https/key.pem")
+context.load_cert_chain("../https/cert.pem", "../https/key.pem")
 
 app.run(host='0.0.0.0', port=server_port, ssl_context=context)
