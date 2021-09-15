@@ -158,12 +158,17 @@ def is_username_valid(username):
     regex_match = re.search('^[a-zA-Z0-9]{4,64}$', username)
     return regex_match is not None
 
-ip_addr = 'daremvp.southeastasia.cloudapp.azure.com'
+# resolve current web server IP address
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+ip_addr = s.getsockname()[0]
+s.close()
+
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 server_port = 8443
-server_FQDN = 'https://daremvp.southeastasia.cloudapp.azure.com:' + str(server_port)
+server_FQDN = 'https://' + ip_addr + ':' + str(server_port)
 
 bcrypt = Bcrypt(app)
 
