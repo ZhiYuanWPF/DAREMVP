@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Settings</title>
+        <!-- Custom fonts for this template-->
+        <link href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ url_for('static', filename='vendor/font/GSans.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <!-- Custom styles for this template-->
+        <link href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/customcss.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+        <!-- for jalert -->
+        <link href="{{ url_for('static', filename='css/jAlert/jAlert.css') }}" rel="stylesheet">
+        <!-- imports for toastr -->
+     	<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css"> 
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon/favicon1.ico') }}"/>
+
+
+    </head>
+    <body id="page-top">
+        <!-- Page Wrapper -->
+        <div id="wrapper">
+            <!-- Sidebar -->
+            {% include "template_files/navbar.html" %}
+            <!-- end of Sidebar -->
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+                <!-- Main Content -->
+                <div id="content">
+                    <!-- Topbar -->
+                    {% include "template_files/topbar.html" %}
+                    <!-- End of Topbar -->
+                    <!-- Begin Page Content -->
+                    <div id="overlay">
+                        <img src="{{ url_for('static', filename='img/loading.gif') }}" id="loading">
+                    </div>
+                    <div class="container-fluid">
+                        <!-- Page Heading -->
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 class="h3 mb-0 text-gray-800"><b>Overall Management</b></h1>
+                        </div>
+                        <i class="fas fa-exclamation-circle"></i> All items in the store are displayed here.
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-12 mb-12">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3 d-sm-flex align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">All Items in Menu</h6>
+                                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" data-toggle="modal" data-target="#addItemModal"><i class="fas fa-utensils"></i>  Add Item to Menu</a>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                   <tr>
+                                                      <th>ID</th>
+                                                      <th>Name</th>
+                                                      <th>Price</th>
+                                                      <th>Modify?</th>
+                                                   </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add Food Item Modal-->
+                        <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-success">
+                                        <h5 class="modal-title text-white" id="modalLabel"><i class="fas fa-plus-circle"></i> Menu Item Addition</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span class="text-white" aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <form enctype="multipart/form-data" method="POST" id="add_item_form">
+                                        <div class="modal-body">
+                                            <span>You are adding the following item:</span><br><br>
+                                            <span class="font-weight-bold">ID: </span><br>
+                                            <input id="add_modal_id" style="margin-right:10px" class="form-control bg-light border-0 small">
+                                            <br>
+                                            <span class="font-weight-bold">Name: </span><br>
+                                            <input id="add_modal_name" style="margin-right:10px" class="form-control bg-light border-0 small">
+                                            <br>
+                                            <span class="font-weight-bold">Price ($): </span><br>
+                                            <input id="add_modal_price" style="margin-right:10px" class="form-control bg-light border-0 small">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="submit_btn_add_item" type="submit" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i class="fa fa-plus-circle fa-lg"></i> Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edit Item Modal -->
+                        <div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary">
+                                        <h5 class="modal-title text-white" id="modalLabel"><i class="fa fa-cogs"></i> Menu Item Modification</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span class="text-white" aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <form enctype="multipart/form-data" method="POST" id="modify_item_form">
+                                        <div class="modal-body">
+                                            <span>You are modifying the following item:</span><br><br>
+                                            <span class="font-weight-bold">ID: </span><br>
+                                            <input id="modify_modal_id" style="margin-right:10px" class="form-control bg-light border-0 small">
+                                            <br>
+                                            <span class="font-weight-bold">Name: </span><br>
+                                            <input id="modify_modal_name" style="margin-right:10px" class="form-control bg-light border-0 small">
+                                            <br>
+                                            <span class="font-weight-bold">Price ($): </span><br>
+                                            <input id="modify_modal_price" style="margin-right:10px" class="form-control bg-light border-0 small">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <span style="cursor:pointer" id="submit_btn_delete_item" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fas fa-minus-circle"></i> Delete</span>
+                                            <button id="submit_btn_modify_item" type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-wrench"></i> Modify</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- End of Main Content -->
+                {% include "template_files/footer.html" %}
+            </div>
+            <!-- End of Content Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+        </a>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="{{ url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="{{ url_for('static', filename='js/sb-admin-2.min.js') }}"></script>
+        <!-- for jalert -->
+        <script src="{{ url_for('static', filename='js/jAlert/jAlert.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jAlert/jAlert-functions.min.js') }}"></script>
+        <!-- Scripts for Toastr -->
+    	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
+
+
+
+        <script>
+            var table_data;
+            var modified_row;
+            function populateDataTable(data) {
+                // clear the table before populating it with more data
+                $("#dataTable").DataTable().clear();
+                var length = Object.keys(data).length;
+
+                for(var i = 0; i < length; i++) {
+                    var button = '<a href="#" data-toggle="modal" data-id=' + i + ' data-target="#editItemModal"><i class="fas fa-wrench"></i></a>';
+
+                    $('#dataTable').dataTable().fnAddData( [
+                        data[i].id,
+                        data[i].name,
+                        '$' + data[i].price,
+                        button
+                    ]);
+                }
+            }
+
+            $(document).ready(function() {
+                 // setup toastr options
+                 toastr.options = {
+					"closeButton": true,
+					"debug": false,
+					"newestOnTop": false,
+					"progressBar": false,
+					"positionClass": "toast-bottom-right",
+					"preventDuplicates": false,
+					"onclick": null,
+					"showDuration": "300",
+					"hideDuration": "1000",
+					"timeOut": "5000",
+					"extendedTimeOut": "0",
+					"showEasing": "swing",
+					"hideEasing": "linear",
+					"showMethod": "fadeIn",
+					"hideMethod": "fadeOut"
+				};
+
+                $('#dataTable').dataTable({
+                    'paging': false,
+                    'searching': false,
+                    'ordering' : false,
+                    'columnDefs': [
+                      {'width': '5%', 'targets': 3}
+                    ],
+                });
+
+                // populate modal with information
+                $('#editItemModal').on('shown.bs.modal', function(e) {
+                    $("#modify_modal_id").val(table_data[$(e.relatedTarget).attr('data-id')].id);
+                    $("#modify_modal_name").val(table_data[$(e.relatedTarget).attr('data-id')].name);
+                    $("#modify_modal_price").val(table_data[$(e.relatedTarget).attr('data-id')].price);
+                    modified_row = table_data[$(e.relatedTarget).attr('data-id')].id;
+                });
+
+                $.ajax({
+                   type: 'get',
+                   url: '{{ip_addr}}/get_catalog',
+                   processData: false,
+                   contentType: false,
+                   success: function(data) {
+                        if (typeof data.resp !== 'undefined') {
+                            // updated
+                            table_data = data.resp;
+                            toastr.success("Catalog retrieved.");
+                            populateDataTable(table_data);
+                        }
+                        else {
+                            // not updated
+                            toastr.error("Unable to retrieve catalog.");
+                        }
+                    }
+            
+                });
+             });
+
+            $('#add_item_form').on('submit', function(e) {
+                e.preventDefault();
+                var formData = new FormData();
+                var id = document.getElementById("add_modal_id").value;
+                var name = document.getElementById("add_modal_name").value;
+                var price = document.getElementById("add_modal_price").value;
+
+                formData.append("id", id);
+                formData.append("name", name);
+                formData.append("price", price);
+
+                   // ajax functions
+                   $.ajax({
+                   type: 'post',
+                   url: '{{ip_addr}}/add_catalog',
+                   data: formData,
+                   processData: false,
+                   contentType: false,
+                   success: function(data) {
+                        outputString = data.message;
+                        if (data.added === true) {
+                            // updated
+                            toastr.success(outputString);
+
+                            // close modal
+                            $('#addItemModal').modal('toggle');
+                            // update table
+                            table_data = data.new_table_info;
+                            populateDataTable(data.new_table_info);
+                            $("#add_modal_id").val('');
+                            $("#add_modal_name").val('');
+                            $("#add_modal_price").val('');
+                        }
+                        else {
+                            // not updated
+                            toastr.error(outputString);
+                        }
+                    }
+            
+                });
+            });
+
+            $('#submit_btn_delete_item').on('click', function(e) {
+                var formData = new FormData();
+                formData.append("id", modified_row);
+
+                // ajax functions
+                $.ajax({
+                    type: 'post',
+                    url: '{{ip_addr}}/delete_catalog',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        outputString = data.message;
+                        // close modal
+                        $('#editItemModal').modal('toggle');
+                        if (data.deleted === true) {
+                            // deleted
+                            toastr.success(outputString);
+                            // update table
+                            table_data = data.new_table_info;
+                            populateDataTable(data.new_table_info);
+                        }
+                        else {
+                            // not deleted
+                            toastr.error(outputString);
+                        }
+                    }
+
+                });
+            });
+            
+
+
+            $('#modify_item_form').on('submit', function(e) {
+                e.preventDefault();
+                var formData = new FormData();
+                var updated_id = document.getElementById("modify_modal_id").value;
+                var updated_name = document.getElementById("modify_modal_name").value;
+                var updated_price = document.getElementById("modify_modal_price").value;
+                var original_id = modified_row;
+
+                formData.append("original_id", original_id);
+                formData.append("updated_id", updated_id);
+                formData.append("updated_name", updated_name);
+                formData.append("updated_price", updated_price);
+
+                // ajax functions
+                $.ajax({
+                    type: 'post',
+                    url: '{{ip_addr}}/update_catalog',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        outputString = data.message;
+                        // close modal
+                        $('#editItemModal').modal('toggle');
+                        if (data.updated === true) {
+                            // updated
+                            toastr.success(outputString);
+                            // update table
+                            table_data = data.new_table_info;
+                            populateDataTable(data.new_table_info);
+                        }
+                        else {
+                            // not updated
+                            toastr.error(outputString);
+                        }
+                    }
+
+                });
+            });
+
+
+        </script>
+    </body>
+</html>
+

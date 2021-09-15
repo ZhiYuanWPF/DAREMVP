@@ -1,0 +1,147 @@
+/*
+    custom css files created by zhi yuan
+*/
+
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+}
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}
+
+
+.elementToFadeInAndOut {
+    -webkit-animation: fadeinout 3s linear forwards;
+    animation: fadeinout 3s linear forwards;
+}
+
+@-webkit-keyframes fadeinout {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeinout {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+
+#loading{
+    width: 150px;
+    height: 150px;
+    border: 5px solid #ccc;
+    border-radius: 100%;
+    position: fixed;
+    opacity: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+#overlay {
+    background: #636262;
+    display: none;
+    position: absolute;
+    z-index:10000000;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.7;
+}
+
+#results-wrapper{
+    position:relative;
+}
+
+
+.transition{
+  -webkit-transition: left 1.5s ease-out;  /* Chrome 1-25, Safari 3.2+ */
+     -moz-transition: left 1.5s ease-out;  /* Firefox 4-15 */
+       -o-transition: left 1.5s ease-out;  /* Opera 10.50–12.00 */
+          transition: left 1.5s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.10+ */
+
+}
+
+body {
+    animation: fadein 1s;
+    -moz-animation: fadein 1s; /* Firefox */
+    -webkit-animation: fadein 1s; /* Safari and Chrome */
+    -o-animation: fadein 1s; /* Opera */
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-moz-keyframes fadein { /* Firefox */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-o-keyframes fadein { /* Opera */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+table.dataTable thead tr {
+  background-color: #4066D5;
+  color: white;
+}
+
+table thead tr {
+  background-color: #4066D5;
+  color: white;
+}
+
+i.fa_custom_circle {
+  display: inline-block;
+  border-radius: 60px;
+  box-shadow: 0px 0px 2px #888;
+  padding: 0.5em 0.6em;
+
+}
+
+html {
+  scroll-behavior: smooth;
+}
