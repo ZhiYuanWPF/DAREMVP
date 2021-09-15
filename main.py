@@ -549,4 +549,4 @@ context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 context.set_ciphers(ciphersuite_list)
 context.load_cert_chain("https/cert.pem", "https/key.pem")
 
-app.run(host=ip_addr, port=server_port, ssl_context=context)
+app.run(host='0.0.0.0', port=server_port, ssl_context=context)
