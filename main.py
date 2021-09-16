@@ -1,34 +1,49 @@
-import socket
-import ssl
-
 from flask import Flask
 from flask import render_template
 from flask import request
 from flask import redirect
 from flask import session
+from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_bcrypt import Bcrypt
 
-from requests import get
-
-from functools import wraps
 from datetime import datetime
+from functools import wraps
 
 import os
 import re
 import pyotp
 import pymongo
-import time
+import socket
+import ssl
+import sys
 
-# connect to mongodb
-#client = pymongo.MongoClient("mongodb://localhost:27017/")
-# get password
-with open('../mongo_pw.txt', 'r') as f:
-    mongo_password = f.read()
+# get mongo connection string
+if len(sys.argv) != 2:
+    print("Error! No MongoDB connection string specified.")
+    sys.exit(1)
 
-client = pymongo.MongoClient('mongodb+srv://azureuser:' + mongo_password + '@cluster0.yqwjc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+cxn_string = sys.argv[1]
+
+try:
+    client = pymongo.MongoClient(cxn_string)
+    mydb = client["DAREMVP"]
+    # initialise document stores in mongodb if it does not exist
+    dummydoc = {"test": "dummy"}
+
+    mycol = mydb["credentials"]
+    mycol.insert_one(dummydoc)
+    mycol.delete_one(dummydoc)
+
+    mycol = mydb["menucatalog"]
+    mycol.insert_one(dummydoc)
+    mycol.delete_one(dummydoc)
+
+except Exception as e:
+    print('Error connecting to database using the specified connection string')
+    sys.exit(1)
+
 
 mongo_catalog = client["DAREMVP"]["menucatalog"]
 mongo_cred = client["DAREMVP"]["credentials"]
@@ -555,6 +570,6 @@ def ratelimit_handler(error):
 ciphersuite_list = "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384"
 context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 context.set_ciphers(ciphersuite_list)
-context.load_cert_chain("../https/cert.pem", "../https/key.pem")
+context.load_cert_chain("https/cert.pem", "https/key.pem")
 
 app.run(host='0.0.0.0', port=server_port, ssl_context=context)
