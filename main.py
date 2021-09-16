@@ -20,7 +20,7 @@ import ssl
 import sys
 
 # get mongo connection string
-if len(sys.argv) != 2:
+if len(sys.argv) != 2 and len(sys.argv) != 3:
     print("Error! No MongoDB connection string specified.")
     sys.exit(1)
 
@@ -43,7 +43,6 @@ try:
 except Exception as e:
     print('Error connecting to database using the specified connection string')
     sys.exit(1)
-
 
 mongo_catalog = client["DAREMVP"]["menucatalog"]
 mongo_cred = client["DAREMVP"]["credentials"]
@@ -182,14 +181,25 @@ def is_username_valid(username):
 
 
 app = Flask(__name__)
-app.config['CORS_HEADERS'] = 'Content-Type'
-server_port = 8443
-server_FQDN = 'https://daremvp.southeastasia.cloudapp.azure.com:' + str(server_port)
-
 bcrypt = Bcrypt(app)
 
+# resolve current web server IP address
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+ip_addr = s.getsockname()[0]
+s.close()
+
+server_port = 8443
+if len(sys.argv) == 3:
+    if sys.argv[2] == 'cloud':
+        server_FQDN = 'https://daremvp.southeastasia.cloudapp.azure.com:' + str(server_port)
+else:
+    server_FQDN = 'https://' + str(ip_addr) + ':' + str(server_port)
+
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 # to fix issue with certain FireFox and Chrome
-cors = CORS(app, resources={r"/foo": {"origins": ''}})
+cors = CORS(app, resources={r"/foo": {"origins": ip_addr}})
 
 app.config["SECRET_KEY"] = "APP_SECRET_KEY"
 limiter = Limiter(
