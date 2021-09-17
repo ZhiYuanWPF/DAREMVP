@@ -112,13 +112,17 @@ def mongo_does_username_exist(username):
 def mongo_authenticate_user(username, password):
     try:
         result = mongo_cred.find_one({"username": username})
-        password_hash = result['password']
-        hash_comparison = bcrypt.check_password_hash(password_hash, password)
 
-        if hash_comparison is False:
-            return False
+        if result is not None:
+            password_hash = result['password']
+            hash_comparison = bcrypt.check_password_hash(password_hash, password)
+
+            if hash_comparison is False:
+                return False
+            else:
+                return result['auth_secret']
         else:
-            return result['auth_secret']
+            return False
 
     except pymongo.errors.PyMongoError as e:
         return None
